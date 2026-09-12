@@ -1,6 +1,16 @@
 # ClinHallu 2.2 — complete training and baseline pipeline
 
-This project trains GAER++, selects the checkpoint on validation data, calibrates it on validation data, and evaluates on a frozen test split. It also runs five independently trained ablations and provides thirteen configured baseline instances.
+[![Python](https://img.shields.io/badge/Python-3.10--3.13-3776ab?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Transformers](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-4.57.6-ffcc4d)](https://huggingface.co/docs/transformers)
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-LLM%20judges-6467f2?logo=openai&logoColor=white)](https://openrouter.ai/)
+
+**Datasets**
+
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-PubMedQA-ffcc4d)](https://huggingface.co/datasets/qiaojin/PubMedQA)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-MedHallu-ffcc4d)](https://huggingface.co/datasets/UTAustin-AIHealth/MedHallu)
+
+This project trains GAER++, selects the checkpoint on validation data, calibrates it on validation data, and evaluates on a frozen test split. It also runs five independently trained ablations and provides nine configured baseline instances.
 
 **The consistency baselines share the same five answers.** For official-style SelfCheckGPT sampling, five separate stochastic OpenRouter requests produce five sampled passages for each unique question/context pair. The answers are saved in a JSON array and reused locally. Neither scoring command generates answers or calls OpenRouter.
 
@@ -45,6 +55,17 @@ python scripts/check_environment.py
 `python -m clinhallu` can replace `clinhallu` in every command below.
 
 ## 2. Put your fixed data splits in place
+
+### Source datasets
+
+The splits used in this work are derived from two public Hugging Face datasets:
+
+| | Dataset | Role in this project |
+|---|---|---|
+| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-PubMedQA-ffcc4d)](https://huggingface.co/datasets/qiaojin/PubMedQA) | **PubMedQA** | Biomedical QA built from PubMed abstracts. Each item pairs a research question and abstract context with a yes/no/maybe answer. Supplies the question and context fields. |
+| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-MedHallu-ffcc4d)](https://huggingface.co/datasets/UTAustin-AIHealth/MedHallu) | **MedHallu** | Medical hallucination-detection benchmark built on PubMedQA, with labelled hallucinated and non-hallucinated answer pairs. Supplies the candidate answers and `hallu_label`. |
+
+Neither dataset ships with this repository. Download them yourself, build the splits described below, and check their licence terms before redistributing any derived file.
 
 The default C5 experiment, baselines, and shared generation use:
 
@@ -116,27 +137,25 @@ export OPENROUTER_API_KEY
 
 The default generator is `openai/gpt-4.1-mini`. Change `model_name` in `configs/generation/shared_five.yaml` to use another OpenRouter model. The judge instances are:
 
-| Suite name | OpenRouter model ID | Config under `configs/baselines/llm_judges/` |
-|---|---|---|
-| `openrouter_gpt_5_mini` | `openai/gpt-5-mini` | `openrouter_gpt_5_mini.yaml` |
-| `openrouter_gemini_2_5_flash` | `google/gemini-2.5-flash` | `openrouter_gemini_2_5_flash.yaml` |
-| `openrouter_deepseek_chat` | `deepseek/deepseek-chat` | `openrouter_deepseek_chat.yaml` |
-| `openrouter_llama_3_3_70b_instruct` | `meta-llama/llama-3.3-70b-instruct` | `openrouter_llama_3_3_70b_instruct.yaml` |
-| `openrouter_qwen3_32b` | `qwen/qwen3-32b` | `openrouter_qwen3_32b.yaml` |
-| `openrouter_llama_4_maverick` | `meta-llama/llama-4-maverick` | `openrouter_llama_4_maverick.yaml` |
-| `openrouter_qwen3_30b_a3b` | `qwen/qwen3-30b-a3b` | `openrouter_qwen3_30b_a3b.yaml` |
-| `openrouter_gemini_2_5_flash_lite` | `google/gemini-2.5-flash-lite` | `openrouter_gemini_2_5_flash_lite.yaml` |
+Four OpenRouter models are used as LLM judges:
 
-Each judge has its own output and API-cache directory. Reports keep every model separate.
+| | Judge | Suite name | OpenRouter model ID | Notes |
+|---|---|---|---|---|
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5%20Mini-10a37f?logo=openai&logoColor=white)](https://openrouter.ai/openai/gpt-5-mini) | **GPT-5 Mini** | `openrouter_gpt_5_mini` | `openai/gpt-5-mini` | Minimal reasoning, 4096-token completion budget, no custom temperature. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-DeepSeek%20V3-4d6bfe?logo=deepseek&logoColor=white)](https://openrouter.ai/deepseek/deepseek-chat) | **DeepSeek V3 (Chat)** | `openrouter_deepseek_chat` | `deepseek/deepseek-chat` | Flagship DeepSeek chat model. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%203.3%2070B-0866ff?logo=meta&logoColor=white)](https://openrouter.ai/meta-llama/llama-3.3-70b-instruct) | **Llama 3.3 70B Instruct** | `openrouter_llama_3_3_70b_instruct` | `meta-llama/llama-3.3-70b-instruct` | Meta multilingual instruction-tuned 70B model. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Qwen3%2032B-6f42c1?logo=alibabacloud&logoColor=white)](https://openrouter.ai/qwen/qwen3-32b) | **Qwen3 32B** | `openrouter_qwen3_32b` | `qwen/qwen3-32b` | Reasoning ("thinking mode") disabled for the judge task. |
+
+Config files live under `configs/baselines/llm_judges/<suite name>.yaml`. Each judge has its own output and API-cache directory. Reports keep every model separate.
 
 Inspect the current public catalog without a paid completion:
 
 ```bash
 clinhallu api models --contains gpt-5-mini
-clinhallu api models --contains gemini-2.5-flash
+clinhallu api models --contains deepseek-chat
 ```
 
-API parameters and endpoint compatibility are documented in [api_sources.md](docs/api_sources.md). Model availability can change. Judge responses are validated locally. Harmless provider-added JSON fields are recorded and ignored; missing or invalid required values are rejected. GPT-5 Mini omits the unsupported custom temperature parameter, uses minimal reasoning, and has a 4096-token completion budget because its reasoning tokens count against that limit. Gemini/Qwen disable optional reasoning for their short JSON response budget.
+API parameters and endpoint compatibility are documented in [api_sources.md](docs/api_sources.md). Model availability can change. Judge responses are validated locally. Harmless provider-added JSON fields are recorded and ignored; missing or invalid required values are rejected. GPT-5 Mini omits the unsupported custom temperature parameter, uses minimal reasoning, and has a 4096-token completion budget because its reasoning tokens count against that limit. Qwen3 32B disables optional reasoning for its short JSON response budget.
 
 ## 4. Run the whole pipeline
 
@@ -157,7 +176,7 @@ The stages run sequentially:
 1. Prepare C5, train GAER++, calibrate on validation, evaluate the frozen split.
 2. Independently train and evaluate ablations B, C, D, E, and F.
 3. Generate five independently sampled answers per evaluation question/context.
-4. Run the five default-enabled baselines: three conventional methods, SelfCheckGPT-NLI, and self-consistency. The eight paid judges are run explicitly one at a time.
+4. Run the five default-enabled baselines: three conventional methods, SelfCheckGPT-NLI, and self-consistency. The four paid judges are run explicitly one at a time.
 5. Build tables, summaries, and figures.
 
 Each stage is recorded as it completes, so re-running this command after an interruption skips the stages that finished and picks up the first one that did not. The stage that was cut off resumes from its own checkpoint rather than from its beginning. Cached API completions are reused as before. Errors stop the relevant stage; fix the reported cause and rerun the same command. No training or validation data are sent to OpenRouter by default.
@@ -329,13 +348,7 @@ This writes to `artifacts/baselines/openrouter_gpt_5_mini_v3`. It intentionally
 does not reuse the older `v2` cache whose 512-token GPT-5 requests can end with
 `finish_reason: length` before the JSON answer is emitted.
 
-Gemini 2.5 Flash:
-
-```bash
-clinhallu baseline run --only openrouter_gemini_2_5_flash
-```
-
-DeepSeek Chat:
+DeepSeek V3 (Chat):
 
 ```bash
 clinhallu baseline run --only openrouter_deepseek_chat
@@ -351,24 +364,6 @@ Qwen3 32B:
 
 ```bash
 clinhallu baseline run --only openrouter_qwen3_32b
-```
-
-Llama 4 Maverick:
-
-```bash
-clinhallu baseline run --only openrouter_llama_4_maverick
-```
-
-Qwen3 30B A3B:
-
-```bash
-clinhallu baseline run --only openrouter_qwen3_30b_a3b
-```
-
-Gemini 2.5 Flash Lite:
-
-```bash
-clinhallu baseline run --only openrouter_gemini_2_5_flash_lite
 ```
 
 Choose a model directly, with a separate output directory:
@@ -517,7 +512,7 @@ clinhallu baseline run
 clinhallu report build
 ```
 
-`configs/baselines/suite.yaml` contains thirteen configured entries. Five local/scoring entries are enabled by default; all eight paid judges are disabled by default to prevent accidental bulk spending. Run a judge explicitly with `--only`; selected entries run even when disabled by default.
+`configs/baselines/suite.yaml` contains nine configured entries. Five local/scoring entries are enabled by default; all four paid judges are disabled by default to prevent accidental bulk spending. Run a judge explicitly with `--only`; selected entries run even when disabled by default.
 
 Rebuild only baseline reports:
 
@@ -568,25 +563,3 @@ The test suite includes actual training/calibration/evaluation with a tiny local
 Preparing a paper submission or publishing this repository: [submission guide](SUBMISSION_GUIDE.md).
 
 Further documentation: [resuming interrupted runs](docs/resume.md), [architecture](docs/architecture.md), [data protocol](docs/data_protocol.md), [baseline protocol](docs/baseline_protocol.md), [shared-answer protocol](docs/shared_answer_protocol.md), [2.2 changes](docs/changes_2_2.md), and [validation report](docs/validation_report.md).
-
----
-
-## Appendix — LLM-as-Judge Quick Reference (added)
-
-| | Judge | OpenRouter Model | Notes |
-|---|---|---|---|
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5%20Mini-10a37f?logo=openai&logoColor=white)](https://openrouter.ai/openai/gpt-5-mini) | **GPT-5 Mini** | `openai/gpt-5-mini` | Minimal reasoning, 4096-token completion budget, no custom temperature. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Gemini%202.5%20Flash-4285f4?logo=googlegemini&logoColor=white)](https://openrouter.ai/google/gemini-2.5-flash) | **Gemini 2.5 Flash** | `google/gemini-2.5-flash` | Reasoning disabled for short JSON response budget. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-DeepSeek%20V3-4d6bfe?logo=deepseek&logoColor=white)](https://openrouter.ai/deepseek/deepseek-chat) | **DeepSeek V3 (Chat)** | `deepseek/deepseek-chat` | Flagship DeepSeek chat model. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%203.3%2070B-0866ff?logo=meta&logoColor=white)](https://openrouter.ai/meta-llama/llama-3.3-70b-instruct) | **Llama 3.3 70B Instruct** | `meta-llama/llama-3.3-70b-instruct` | Meta multilingual instruction-tuned 70B model. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Qwen3%2032B-6f42c1?logo=alibabacloud&logoColor=white)](https://openrouter.ai/qwen/qwen3-32b) | **Qwen3 32B** | `qwen/qwen3-32b` | Reasoning ("thinking mode") disabled for the judge task. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%204%20Maverick-0866ff?logo=meta&logoColor=white)](https://openrouter.ai/meta-llama/llama-4-maverick) | **Llama 4 Maverick** | `meta-llama/llama-4-maverick` | Meta's Llama 4 MoE model. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Qwen3%2030B%20A3B-6f42c1?logo=alibabacloud&logoColor=white)](https://openrouter.ai/qwen/qwen3-30b-a3b) | **Qwen3 30B A3B** | `qwen/qwen3-30b-a3b` | Mixture-of-experts Qwen3 variant. |
-| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Gemini%202.5%20Flash%20Lite-4285f4?logo=googlegemini&logoColor=white)](https://openrouter.ai/google/gemini-2.5-flash-lite) | **Gemini 2.5 Flash Lite** | `google/gemini-2.5-flash-lite` | Lighter/faster Gemini 2.5 variant. |
-
-## Appendix — Reference Datasets (added)
-
-| | Dataset | Description |
-|---|---|---|
-| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-PubMedQA-ffcc4d)](https://huggingface.co/datasets/qiaojin/PubMedQA) | **PubMedQA** | Biomedical QA dataset built from PubMed abstracts; each item pairs a research question and abstract context with a yes/no/maybe answer. |
-| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-MedHallu-ffcc4d)](https://huggingface.co/datasets/UTAustin-AIHealth/MedHallu) | **MedHallu** | Benchmark for medical hallucination detection, built on top of PubMedQA, with labeled and artificially generated hallucinated/non-hallucinated answer pairs. |
