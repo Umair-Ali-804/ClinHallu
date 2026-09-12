@@ -1,0 +1,8 @@
+extends: ../base.yaml
+experiment:
+  name: C_cross_attention
+  kind: ablations
+model:
+  ablation_mode: C_cross_attention
+data:
+  processed_dir: data/processed/c5

@@ -1,0 +1,5 @@
+name: tfidf_lr
+method: tfidf_lr
+seed: 13
+max_features: 100000
+output_dir: artifacts/baselines/tfidf_lr

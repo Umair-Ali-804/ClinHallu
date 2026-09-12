@@ -1,0 +1,2 @@
+Evaluate the following input and return the required JSON object:
+{{INPUT_JSON}}

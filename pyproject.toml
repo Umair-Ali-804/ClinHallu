@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinhallu"
+version = "2.2.1"
+description = "GAER++ training and calibrated medical hallucination evaluation"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "accelerate>=1.0,<2",
+  "joblib>=1.3,<2",
+  "matplotlib>=3.8,<4",
+  "numpy>=1.26,<3",
+  "pandas>=2.1,<3",
+  "peft>=0.13,<0.19",
+  "PyYAML>=6,<7",
+  "safetensors>=0.4,<1",
+  "scikit-learn>=1.4,<2",
+  "scipy>=1.12,<2",
+  "seaborn>=0.13,<1",
+  "sentence-transformers>=3,<6",
+  "sentencepiece>=0.2,<1",
+  "selfcheckgpt==0.1.7",
+  "statsmodels>=0.14,<1",
+  "torch>=2.2,<3",
+  "tqdm>=4.66,<5",
+  "transformers>=4.45,<5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+
+[project.scripts]
+clinhallu = "clinhallu.cli.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["clinhallu*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B"]

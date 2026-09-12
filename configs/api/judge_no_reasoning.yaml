@@ -1,0 +1,11 @@
+prompts:
+  system: prompts/judge_system.txt
+  user: prompts/judge_user.txt
+request:
+  temperature: 0.0
+  max_tokens: 512
+  response_format: json_schema
+  timeout: 120
+  rate_limit_retries: 0
+  reasoning:
+    enabled: false

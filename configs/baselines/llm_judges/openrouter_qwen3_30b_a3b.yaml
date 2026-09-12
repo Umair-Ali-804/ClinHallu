@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: qwen/qwen3-30b-a3b
+api_config: configs/api/judge_no_reasoning.yaml
+output_dir: artifacts/baselines/openrouter_qwen3_30b_a3b

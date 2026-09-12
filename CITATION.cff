@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use ClinHallu, please cite this software and the associated paper."
+title: "ClinHallu: GAER++ Medical Hallucination Detection"
+type: software
+version: 2.2.1
+date-released: 2026-09-10
+authors:
+  - family-names: Ali
+    given-names: Umair
+license: LicenseRef-Proprietary

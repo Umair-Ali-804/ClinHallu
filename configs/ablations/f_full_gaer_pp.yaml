@@ -1,0 +1,8 @@
+extends: ../base.yaml
+experiment:
+  name: F_full_gaer_plus_plus
+  kind: ablations
+model:
+  ablation_mode: F_full_gaer_plus_plus
+data:
+  processed_dir: data/processed/c5

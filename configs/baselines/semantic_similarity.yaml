@@ -1,0 +1,11 @@
+name: semantic_similarity
+method: semantic_similarity
+model_name: pritamdeka/S-PubMedBert-MS-MARCO
+revision: c054a40623002e83a9a5e3e1912461eaa89cae05
+batch_size: 32
+top_k: 1
+max_sentences: 32
+context_window: 2
+threshold_objective: macro_f1
+cache_dir: data/cache/baselines
+output_dir: artifacts/baselines/semantic_similarity

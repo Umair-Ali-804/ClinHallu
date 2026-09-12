@@ -1,0 +1,11 @@
+method: self_consistency
+answers_dir: data/generated/shared_five
+model_name: cross-encoder/nli-deberta-v3-base
+revision: 07c1fa65279cc95163bc0b3e12404b37955d804f
+batch_size: 16
+max_length: 512
+support_threshold: 0.5
+cache_dir: data/cache/baselines
+output_dir: artifacts/baselines/self_consistency
+threshold_mode: fixed
+decision_threshold: 0.5

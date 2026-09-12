@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: deepseek/deepseek-chat
+api_config: configs/api/judge.yaml
+output_dir: artifacts/baselines/openrouter_deepseek_chat

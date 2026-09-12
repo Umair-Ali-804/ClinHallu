@@ -1,0 +1,8 @@
+extends: ../base.yaml
+experiment:
+  name: E_evidence_pooling
+  kind: ablations
+model:
+  ablation_mode: E_evidence_pooling
+data:
+  processed_dir: data/processed/c5

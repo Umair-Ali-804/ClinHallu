@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: google/gemini-2.5-flash
+api_config: configs/api/judge_no_reasoning.yaml
+output_dir: artifacts/baselines/openrouter_gemini_2_5_flash

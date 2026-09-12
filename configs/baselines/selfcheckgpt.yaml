@@ -1,0 +1,6 @@
+method: selfcheckgpt
+answers_dir: data/generated/shared_five
+cache_dir: data/cache/baselines
+output_dir: artifacts/baselines/selfcheckgpt
+threshold_mode: fixed
+decision_threshold: 0.5

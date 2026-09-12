@@ -1,0 +1,44 @@
+data:
+  train_path: data/raw/train.jsonl
+  val_path: data/raw/val.jsonl
+  eval_path: data/raw/eval_data.jsonl
+baselines:
+  tfidf_lr:
+    enabled: true
+    config: configs/baselines/tfidf_lr.yaml
+  semantic_similarity:
+    enabled: true
+    config: configs/baselines/semantic_similarity.yaml
+  zero_shot_nli:
+    enabled: true
+    config: configs/baselines/zero_shot_nli.yaml
+  openrouter_gpt_5_mini:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_gpt_5_mini.yaml
+  openrouter_gemini_2_5_flash:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_gemini_2_5_flash.yaml
+  openrouter_deepseek_chat:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_deepseek_chat.yaml
+  openrouter_llama_3_3_70b_instruct:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_llama_3_3_70b_instruct.yaml
+  openrouter_qwen3_32b:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_qwen3_32b.yaml
+  openrouter_llama_4_maverick:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_llama_4_maverick.yaml
+  openrouter_qwen3_30b_a3b:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_qwen3_30b_a3b.yaml
+  openrouter_gemini_2_5_flash_lite:
+    enabled: false
+    config: configs/baselines/llm_judges/openrouter_gemini_2_5_flash_lite.yaml
+  selfcheckgpt:
+    enabled: true
+    config: configs/baselines/selfcheckgpt.yaml
+  self_consistency:
+    enabled: true
+    config: configs/baselines/self_consistency.yaml

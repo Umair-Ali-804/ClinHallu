@@ -1,0 +1,8 @@
+extends: ../base.yaml
+experiment:
+  name: B_answer_pooling
+  kind: ablations
+model:
+  ablation_mode: B_answer_pooling
+data:
+  processed_dir: data/processed/c5

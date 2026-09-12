@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: openai/gpt-5-mini
+api_config: configs/api/judge_gpt5.yaml
+output_dir: artifacts/baselines/openrouter_gpt_5_mini_v3

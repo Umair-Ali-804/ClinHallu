@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-10",
+  "command": "python -m pytest",
+  "passed": 91,
+  "failed": 0,
+  "warnings": 1,
+  "duration_seconds": 92.07,
+  "execution": "CPU; real tiny local neural models and mocked OpenRouter API",
+  "research_dataset_used": false,
+  "paid_api_calls": 0
+}

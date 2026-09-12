@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: meta-llama/llama-4-maverick
+api_config: configs/api/judge.yaml
+output_dir: artifacts/baselines/openrouter_llama_4_maverick

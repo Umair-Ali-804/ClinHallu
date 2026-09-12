@@ -1,0 +1,2 @@
+Produce one independently sampled answer in the required JSON object.
+{{INPUT_JSON}}

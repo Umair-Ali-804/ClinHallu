@@ -1,0 +1,5 @@
+method: llm_judge
+provider: openrouter
+model_name: meta-llama/llama-3.3-70b-instruct
+api_config: configs/api/judge.yaml
+output_dir: artifacts/baselines/openrouter_llama_3_3_70b_instruct

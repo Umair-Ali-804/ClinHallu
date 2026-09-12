@@ -1,0 +1,14 @@
+prompts:
+  system: prompts/judge_system.txt
+  user: prompts/judge_user.txt
+request:
+  temperature: null
+  # GPT-5 reasoning tokens count against this output budget. Minimal reasoning
+  # plus 4096 tokens leaves ample room for the required two-field JSON object.
+  max_tokens: 4096
+  response_format: json_schema
+  timeout: 180
+  rate_limit_retries: 0
+  reasoning:
+    effort: minimal
+    exclude: true

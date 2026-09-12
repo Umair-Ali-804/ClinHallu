@@ -1,0 +1,7 @@
+extends: ../base.yaml
+experiment:
+  name: c5
+data:
+  processed_dir: data/processed/c5
+  expected_rows:
+    train: 14000

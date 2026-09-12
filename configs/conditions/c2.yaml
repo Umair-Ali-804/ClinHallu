@@ -1,0 +1,8 @@
+extends: ../base.yaml
+experiment:
+  name: c2
+data:
+  train_path: data/raw/c2/train.jsonl
+  processed_dir: data/processed/c2
+  expected_rows:
+    train: 11000

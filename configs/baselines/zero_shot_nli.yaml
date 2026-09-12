@@ -1,0 +1,11 @@
+name: zero_shot_nli
+method: zero_shot_nli
+model_name: cross-encoder/nli-deberta-v3-base
+revision: 07c1fa65279cc95163bc0b3e12404b37955d804f
+batch_size: 16
+max_context_sentences: 32
+context_window: 2
+contradiction_alpha: 0.0
+threshold_objective: macro_f1
+cache_dir: data/cache/baselines
+output_dir: artifacts/baselines/zero_shot_nli

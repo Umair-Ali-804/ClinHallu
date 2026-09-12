@@ -1,0 +1,17 @@
+model_name: openai/gpt-4.1-mini
+sample_count: 5
+data:
+  validation: data/raw/val.jsonl
+  test: data/raw/eval_data.jsonl
+output_dir: data/generated/shared_five
+cache_dir: data/cache/openrouter/shared_five
+prompts:
+  system: prompts/shared_five_system.txt
+  user: prompts/shared_five_user.txt
+request:
+  temperature: 1.0
+  seed: 13
+  max_tokens: 512
+  response_format: json_schema
+  timeout: 120
+  rate_limit_retries: 2
