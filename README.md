@@ -568,3 +568,25 @@ The test suite includes actual training/calibration/evaluation with a tiny local
 Preparing a paper submission or publishing this repository: [submission guide](SUBMISSION_GUIDE.md).
 
 Further documentation: [resuming interrupted runs](docs/resume.md), [architecture](docs/architecture.md), [data protocol](docs/data_protocol.md), [baseline protocol](docs/baseline_protocol.md), [shared-answer protocol](docs/shared_answer_protocol.md), [2.2 changes](docs/changes_2_2.md), and [validation report](docs/validation_report.md).
+
+---
+
+## Appendix — LLM-as-Judge Quick Reference (added)
+
+| | Judge | OpenRouter Model | Notes |
+|---|---|---|---|
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-GPT--5%20Mini-10a37f?logo=openai&logoColor=white)](https://openrouter.ai/openai/gpt-5-mini) | **GPT-5 Mini** | `openai/gpt-5-mini` | Minimal reasoning, 4096-token completion budget, no custom temperature. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Gemini%202.5%20Flash-4285f4?logo=googlegemini&logoColor=white)](https://openrouter.ai/google/gemini-2.5-flash) | **Gemini 2.5 Flash** | `google/gemini-2.5-flash` | Reasoning disabled for short JSON response budget. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-DeepSeek%20V3-4d6bfe?logo=deepseek&logoColor=white)](https://openrouter.ai/deepseek/deepseek-chat) | **DeepSeek V3 (Chat)** | `deepseek/deepseek-chat` | Flagship DeepSeek chat model. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%203.3%2070B-0866ff?logo=meta&logoColor=white)](https://openrouter.ai/meta-llama/llama-3.3-70b-instruct) | **Llama 3.3 70B Instruct** | `meta-llama/llama-3.3-70b-instruct` | Meta multilingual instruction-tuned 70B model. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Qwen3%2032B-6f42c1?logo=alibabacloud&logoColor=white)](https://openrouter.ai/qwen/qwen3-32b) | **Qwen3 32B** | `qwen/qwen3-32b` | Reasoning ("thinking mode") disabled for the judge task. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Llama%204%20Maverick-0866ff?logo=meta&logoColor=white)](https://openrouter.ai/meta-llama/llama-4-maverick) | **Llama 4 Maverick** | `meta-llama/llama-4-maverick` | Meta's Llama 4 MoE model. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Qwen3%2030B%20A3B-6f42c1?logo=alibabacloud&logoColor=white)](https://openrouter.ai/qwen/qwen3-30b-a3b) | **Qwen3 30B A3B** | `qwen/qwen3-30b-a3b` | Mixture-of-experts Qwen3 variant. |
+| [![OpenRouter](https://img.shields.io/badge/OpenRouter-Gemini%202.5%20Flash%20Lite-4285f4?logo=googlegemini&logoColor=white)](https://openrouter.ai/google/gemini-2.5-flash-lite) | **Gemini 2.5 Flash Lite** | `google/gemini-2.5-flash-lite` | Lighter/faster Gemini 2.5 variant. |
+
+## Appendix — Reference Datasets (added)
+
+| | Dataset | Description |
+|---|---|---|
+| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-PubMedQA-ffcc4d)](https://huggingface.co/datasets/qiaojin/PubMedQA) | **PubMedQA** | Biomedical QA dataset built from PubMed abstracts; each item pairs a research question and abstract context with a yes/no/maybe answer. |
+| [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-MedHallu-ffcc4d)](https://huggingface.co/datasets/UTAustin-AIHealth/MedHallu) | **MedHallu** | Benchmark for medical hallucination detection, built on top of PubMedQA, with labeled and artificially generated hallucinated/non-hallucinated answer pairs. |
