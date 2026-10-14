@@ -1,5 +1,3 @@
-"""Run, list, or summarize publication baselines."""
-
 from __future__ import annotations
 
 import argparse
