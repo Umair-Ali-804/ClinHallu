@@ -1,5 +1,3 @@
-"""Build and protect immutable experiment manifests."""
-
 from __future__ import annotations
 
 import hashlib
@@ -18,11 +16,6 @@ _REPRODUCIBILITY_SECTIONS = (
 
 
 def _config_fingerprint(cfg: dict) -> str:
-    """Hash settings that can change model weights or reported metrics.
-
-    Machine-specific absolute paths are deliberately excluded. Raw file
-    identity is protected separately by the split SHA-256 values.
-    """
 
     data_keys = (
         "overlap_policy",
