@@ -1,5 +1,3 @@
-"""TF-IDF plus logistic-regression publication baseline."""
-
 from __future__ import annotations
 
 import argparse
@@ -26,8 +24,6 @@ def run(
     splits = load_splits(train_path, validation_path, evaluation_path)
     train, validation, evaluation = splits
 
-    # Keep the publication settings for real data while allowing the tiny
-    # fixtures used by smoke tests and tutorials to form a vocabulary.
     min_df = 2 if len(train) >= 20 else 1
     max_df = 0.98 if len(train) >= 50 else 1.0
     config = {
