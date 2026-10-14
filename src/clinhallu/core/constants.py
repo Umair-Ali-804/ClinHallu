@@ -1,4 +1,4 @@
-"""Project-wide names that define the publication protocol."""
+"""Project-wide names that define the protocol."""
 
 LABEL_GROUNDED = 0
 LABEL_HALLUCINATED = 1
