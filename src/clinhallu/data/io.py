@@ -1,4 +1,3 @@
-"""Small JSON/JSONL helpers used across experiments."""
 
 from __future__ import annotations
 
