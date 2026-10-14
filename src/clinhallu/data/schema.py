@@ -1,4 +1,3 @@
-"""Canonical raw and processed record schemas."""
 
 from __future__ import annotations
 
@@ -13,7 +12,6 @@ FIELD_ALIASES = {
 
 
 def canonical_raw_record(record: Mapping[str, Any]) -> dict[str, Any]:
-    """Return the four text fields, ID and binary label under canonical names."""
 
     value = dict(record)
     for canonical, aliases in FIELD_ALIASES.items():
