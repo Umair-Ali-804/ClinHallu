@@ -1,4 +1,3 @@
-"""A crash part-way through a multi-stage job must not restart the whole job."""
 
 from __future__ import annotations
 
