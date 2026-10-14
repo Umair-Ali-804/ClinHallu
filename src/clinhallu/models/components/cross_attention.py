@@ -23,7 +23,6 @@ class BidirectionalCrossAttention(nn.Module):
             dropout=dropout,
             batch_first=True,
         )
-        # LayerNorm applied to the raw attention output only (no residual add of H).
         self.ln_a2c = nn.LayerNorm(hidden_dim)
         self.ln_c2a = nn.LayerNorm(hidden_dim)
 
@@ -46,11 +45,6 @@ class BidirectionalCrossAttention(nn.Module):
         compute_reverse: bool = True,
         need_weights: bool = True,
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        """Run one or both directions and optionally return attention weights.
-
-        When ``compute_reverse`` is false, the reverse output and its weights
-        are returned as ``None``.
-        """
         real = attention_mask.bool()
         context_mask = context_mask.bool()
         answer_mask = answer_mask.bool()
