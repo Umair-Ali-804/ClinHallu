@@ -223,22 +223,6 @@ def run_epoch(
     checkpoint_hook=None,
     guard: Optional[InterruptGuard] = None,
 ) -> dict:
-    """Run one train or validation pass and retain its logits.
-
-    Returning logits means checkpoint selection does not require a second
-    validation pass.
-
-    Resume-related arguments:
-        epoch_batches: batches in a *complete* epoch. When the loader has been
-            shortened for a mid-epoch resume, gradient-accumulation group sizes
-            must still be computed against the full epoch.
-        start_batch: batches already consumed before this call.
-        resume_progress: serialised :class:`EpochAccumulator` state to continue.
-        checkpoint_hook: called at optimizer-step boundaries as
-            ``hook(batches_done, samples_done, accumulator)``.
-        guard: polled at step boundaries; when triggered the pass returns early
-            with ``interrupted=True``.
-    """
 
     training = optimizer is not None
     model.train(training)
@@ -354,12 +338,7 @@ def _read_history(path: str | Path) -> list[dict]:
 
 
 def _merge_history(from_checkpoint: list[dict], from_csv: list[dict]) -> list[dict]:
-    """Prefer the checkpoint's history; fall back to the CSV for older runs.
-
-    The CSV is rewritten after every epoch and the checkpoint carries the same
-    rows, so either source is usually complete. Keeping whichever has more
-    epochs avoids losing a row if one write happened to be the crash victim.
-    """
+ 
 
     if len(from_checkpoint) >= len(from_csv):
         return [dict(row) for row in from_checkpoint]
