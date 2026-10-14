@@ -1,5 +1,3 @@
-"""Build publication-ready tables and primary-model figures."""
-
 from __future__ import annotations
 
 from pathlib import Path
