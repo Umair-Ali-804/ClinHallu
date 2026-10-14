@@ -1,10 +1,3 @@
-"""Resume must be *equivalent*, not merely non-crashing.
-
-The test that matters is this: train an epoch straight through, then train the
-same epoch again but kill it half way and continue from the checkpoint. If the
-resume machinery is correct the two runs end with bit-identical weights,
-optimizer state and metrics -- the crash left no trace in the result.
-"""
 
 from __future__ import annotations
 
@@ -30,7 +23,6 @@ SEQUENCE = 6
 
 
 class _ToyDataset(Dataset):
-    """Deterministic stand-in for the tokenized dataset."""
 
     def __init__(self, size: int) -> None:
         generator = torch.Generator().manual_seed(1234)
@@ -57,7 +49,6 @@ def _collate(batch: list[dict]) -> dict:
 
 
 class _ToyModel(torch.nn.Module):
-    """Mirrors the real model's call signature and output type."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -117,7 +108,6 @@ def test_uninterrupted_epoch_is_the_baseline():
 
 
 def test_resumed_epoch_matches_an_uninterrupted_epoch(tmp_path):
-    # --- reference: one clean pass ---------------------------------------- #
     torch.manual_seed(SEED)
     model, optimizer, scheduler, loader, _ = _make()
     reference = run_epoch(
@@ -130,14 +120,12 @@ def test_resumed_epoch_matches_an_uninterrupted_epoch(tmp_path):
     )
     reference_weights = _weights(model)
 
-    # --- interrupted: stop half way, checkpoint, resume -------------------- #
     torch.manual_seed(SEED)
     model_a, optimizer_a, scheduler_a, loader_a, _ = _make()
     guard = InterruptGuard(install=False)
     saved: dict = {}
 
     def hook(batches_done, samples_done, accumulator):
-        # Ask for a stop at the half-way optimizer step.
         if batches_done == (EXAMPLES // BATCH) // 2:
             progress = accumulator.to_state()
             progress["samples_done"] = samples_done
@@ -175,7 +163,6 @@ def test_resumed_epoch_matches_an_uninterrupted_epoch(tmp_path):
     assert partial["interrupted"]
     assert partial["batches_done"] == saved["batches"]
 
-    # A brand-new process: fresh objects, nothing carried over in memory.
     model_b, optimizer_b, scheduler_b, _, _ = _make()
     state = find_latest_checkpoint(
         str(tmp_path),
@@ -206,7 +193,6 @@ def test_resumed_epoch_matches_an_uninterrupted_epoch(tmp_path):
         **_epoch_kwargs(),
     )
 
-    # --- the two runs must be indistinguishable ---------------------------- #
     for expected, actual in zip(reference_weights, _weights(model_b), strict=True):
         assert torch.allclose(expected, actual, atol=0, rtol=0), "weights diverged after resume"
 
