@@ -1,5 +1,3 @@
-"""Strict fixed-split loading shared by all publication baselines."""
-
 from __future__ import annotations
 
 import hashlib
