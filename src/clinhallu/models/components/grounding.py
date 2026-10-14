@@ -1,5 +1,3 @@
-"""Learned token grounding and context-derived evidence pooling."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -10,7 +8,6 @@ import torch.nn as nn
 
 @dataclass
 class EvidenceStats:
-    """Per-example grounding scores and pooling-distribution statistics."""
 
     mean: torch.Tensor = field(default=None)
     max: torch.Tensor = field(default=None)
@@ -22,7 +19,6 @@ class EvidenceStats:
     high_grounding_fraction: torch.Tensor = field(default=None)
     low_grounding_fraction: torch.Tensor = field(default=None)
 
-    # Fixed order for statistics that enter the primary classifier.
     PRIMARY_STAT_NAMES = ["mean", "max", "min", "std", "entropy", "coverage"]
 
     def as_dict(self) -> dict[str, torch.Tensor]:
@@ -54,7 +50,6 @@ class EvidenceStats:
 
 
 class GroundingAndEvidencePooling(nn.Module):
-    """Pool context-derived evidence with learned answer-token grounding.
 
     For each answer token i:
         ``u_i = [h_i; z_i; |h_i-z_i|; h_i*z_i]``
