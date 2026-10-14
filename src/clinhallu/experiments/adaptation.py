@@ -1,4 +1,3 @@
-"""Run one C1-C5 domain-adaptation condition."""
 
 from __future__ import annotations
 
