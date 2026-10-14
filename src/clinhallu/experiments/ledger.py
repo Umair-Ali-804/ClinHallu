@@ -1,20 +1,3 @@
-"""A durable record of which units of work are already finished.
-
-Training checkpoints make a *single* run resumable. A ledger makes a *sequence*
-of runs resumable: five ablation variants, five pipeline stages, a dozen
-baselines. Without one, a crash during the fourth ablation means the next
-invocation re-derives everything from scratch just to discover the first three
-were already done.
-
-Each entry records a status, an attempt count, timestamps, and a fingerprint of
-the inputs. The fingerprint is what makes skipping safe: if a config changes,
-the fingerprint changes, the previous "completed" entry no longer matches, and
-the unit runs again instead of silently reusing stale results.
-
-Writes are atomic and happen immediately after every state change, so the file
-on disk always reflects reality even if the process dies in the next instant.
-"""
-
 from __future__ import annotations
 
 import hashlib
@@ -90,8 +73,7 @@ class Ledger:
             return True
         recorded = entry.get("fingerprint")
         if recorded is None:
-            # Written before fingerprinting existed; trust it rather than
-            # discarding hours of finished work.
+
             return True
         if recorded != fingerprint_value:
             logger.info(
