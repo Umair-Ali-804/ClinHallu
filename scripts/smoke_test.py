@@ -1,5 +1,3 @@
-"""Run a one-epoch, capped training smoke test without frozen evaluation."""
-
 from __future__ import annotations
 
 import argparse
