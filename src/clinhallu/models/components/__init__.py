@@ -1,4 +1,3 @@
-"""Reusable neural-network components."""
 
 from .answer_pooling import AnswerAttentionPool, AnswerRepresentation
 from .classifier import GAERClassifierHead, HallucinationClassifier
