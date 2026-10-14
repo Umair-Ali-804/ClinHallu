@@ -1,18 +1,3 @@
-"""Cooperative shutdown so an interrupted run stops at a resumable boundary.
-
-Colab disconnects, `Ctrl-C`, and most laptop-sleep/shutdown sequences deliver
-``SIGINT``/``SIGTERM``/``SIGHUP`` before the process is killed. Without a
-handler Python raises immediately wherever execution happens to be, which for a
-training loop is almost always in the middle of a batch -- so the epoch is lost.
-
-``InterruptGuard`` turns those signals into a flag. The training loop polls the
-flag at a safe point (an optimizer-step boundary), writes a checkpoint, and
-exits with :data:`INTERRUPTED_EXIT_CODE`. A second signal is left to the default
-handler so an unresponsive process can always be forced down.
-
-Nothing here can protect against ``SIGKILL`` or a sudden power loss. Those cases
-are covered by frequent atomic checkpointing instead.
-"""
 
 from __future__ import annotations
 
