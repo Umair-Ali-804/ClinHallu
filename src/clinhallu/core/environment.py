@@ -1,5 +1,3 @@
-"""Capture the environment used for a reproducible run."""
-
 from __future__ import annotations
 
 import importlib.metadata
