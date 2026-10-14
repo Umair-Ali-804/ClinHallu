@@ -1,8 +1,3 @@
-"""Public tokenization helpers.
-
-The exact segment construction remains implemented by ``HKGFusionDataset``;
-this module provides a stable import location without duplicating that logic.
-"""
 
 from .dataset import HKGFusionDataset
 
