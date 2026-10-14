@@ -1,5 +1,3 @@
-"""Verify completed runs and fixed validation/evaluation identity."""
-
 from __future__ import annotations
 
 import argparse
