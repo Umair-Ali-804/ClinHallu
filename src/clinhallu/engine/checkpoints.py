@@ -1,28 +1,3 @@
-"""Durable checkpoint persistence with epoch- and step-level resume.
-
-Three properties matter when a run can die at any moment (Colab disconnect,
-closed laptop, power cut):
-
-``durable``
-    The bytes are on the platter before the file becomes visible. Every write
-    goes to a temporary file that is ``fsync``-ed, then atomically renamed, then
-    the directory itself is ``fsync``-ed. A crash therefore leaves either the
-    previous checkpoint or the new one -- never a half-written file.
-
-``redundant``
-    The previous ``latest`` checkpoint is rotated to ``*.bak`` before being
-    replaced. If the newest file is somehow unreadable (a filesystem that lies
-    about ``fsync``, a truncated Google Drive sync), the run falls back one
-    checkpoint instead of restarting from epoch 1.
-
-``complete``
-    Model, optimizer, scheduler and AMP-scaler state are stored together with
-    the position inside the epoch, the RNG state of every library that affects
-    results, and the partially accumulated metrics for the in-flight epoch. A
-    resumed run therefore continues the same trajectory rather than a similar
-    one.
-"""
-
 from __future__ import annotations
 
 import logging
