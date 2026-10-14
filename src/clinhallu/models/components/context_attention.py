@@ -1,5 +1,3 @@
-"""Legacy context-aware attention retained for checkpoint compatibility."""
-
 from __future__ import annotations
 
 from typing import Tuple
