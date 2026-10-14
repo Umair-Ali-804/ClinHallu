@@ -1,5 +1,3 @@
-"""Copy checkpoints and calibration files from the supplied legacy layout."""
-
 from __future__ import annotations
 
 import argparse
