@@ -13,8 +13,6 @@ class AnswerEvidenceInteraction(nn.Module):
 
     def forward(self, a: torch.Tensor, e: torch.Tensor, use_contrast: bool = True) -> torch.Tensor:
         if not use_contrast:
-            # Preserve classifier width so checkpoints share one shape across
-            # ablation modes.
             zeros_pair = torch.zeros_like(a)
             zero_cos = torch.zeros(a.shape[0], 1, device=a.device, dtype=a.dtype)
             return torch.cat([a, e, zeros_pair, zeros_pair, zero_cos], dim=-1)
