@@ -13,6 +13,9 @@ clinhallu ablate --variants B C D E F --seed 13   # skips B and C, continues D m
 There is no separate "resume" command and no flag to remember. Resuming is the
 default; `--no-resume` is how you deliberately start over.
 
+The paper's results use three seeds (13, 42, 77). Each seed has its own run
+directory and its own checkpoints and ledgers, so each resumes independently.
+
 ---
 
 ## 1. What gets saved, and how often
@@ -180,11 +183,12 @@ clinhallu pipeline --condition c5 --seed 13 --status
 | Goal | Command |
 |---|---|
 | Retrain one experiment from scratch | `clinhallu condition c5 --seed 13 --no-resume` |
-| Re-run all ablations from scratch | `clinhallu ablate --variants B C D E F --no-resume` |
-| Re-run only the evaluation stage | `clinhallu condition c5 --force-stage evaluate` |
-| Re-run one pipeline stage | `clinhallu pipeline --force-stage baselines` |
+| Re-run all ablations from scratch | `clinhallu ablate --variants B C D E F --seed 13 --no-resume` |
+| Re-run only the evaluation stage | `clinhallu condition c5 --seed 13 --force-stage evaluate` |
+| Re-run one pipeline stage | `clinhallu pipeline --condition c5 --seed 13 --force-stage baselines` |
 | Re-run one baseline | `clinhallu baseline run --only selfcheckgpt --no-resume` |
-| Keep going past a failing ablation | `clinhallu ablate --variants B C D E F --continue-on-error` |
+| Keep going past a failing ablation | `clinhallu ablate --variants B C D E F --seed 13 --continue-on-error` |
+| Redo a different seed only | add `--seed 42` or `--seed 77`; other seeds are untouched |
 
 `--no-resume` clears the relevant ledger entries and ignores existing training
 checkpoints. It does not delete run directories, so previous artifacts remain on
@@ -211,8 +215,16 @@ checkpoints:
   save_every_minutes: 20
 ```
 
-When a Colab session is reclaimed, reconnect, re-mount Drive, re-install, and
-re-run the identical command. `clinhallu status` first will show what survived.
+When a Colab session is reclaimed, reconnect, re-mount Drive, re-install the
+requirements (keep the pinned Transformers version), and re-run the identical
+command:
+
+```python
+%pip install -q -r requirements/colab.txt
+%pip install -q -e . --no-deps
+```
+
+Run `clinhallu status` first to see what survived.
 
 A twelve-hour Colab limit is not a problem: run the same command across as many
 sessions as it takes.
@@ -225,7 +237,8 @@ sessions as it takes.
   and `find_latest_checkpoint` refuses a checkpoint whose state keys do not
   match the current architecture. Use a new experiment name instead.
 - **Changed data.** The runner already compares the raw-split SHA-256 against
-  `data/manifests/` and refuses to continue if it moved.
+  `data/manifests/` and refuses to continue if it moved. All conditions and
+  seeds must keep using the same frozen validation and evaluation files.
 - **A genuine bug.** A failure recorded as `failed` is retried on the next run;
   if it fails the same way, fix the cause rather than re-running.
 - **Frozen-test integrity.** Resume never touches the evaluation split. The
