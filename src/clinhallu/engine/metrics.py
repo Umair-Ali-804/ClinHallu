@@ -1,5 +1,3 @@
-"""Binary classification metrics and uncertainty estimates."""
-
 from __future__ import annotations
 
 from typing import Callable
