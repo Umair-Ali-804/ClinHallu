@@ -12,14 +12,10 @@ import torch
 
 logger = logging.getLogger(__name__)
 
-#: Bumped when the on-disk layout changes in a way older readers cannot handle.
 CHECKPOINT_FORMAT_VERSION = 2
 
-#: Written after a training pass finishes but before validation has been scored.
 PHASE_EPOCH_TRAINED = "epoch_trained"
-#: Written mid-epoch, at an optimizer-step boundary.
 PHASE_IN_EPOCH = "in_epoch"
-#: Written once an epoch is fully scored and selection has been applied.
 PHASE_EPOCH_COMPLETE = "epoch_complete"
 
 
@@ -84,7 +80,7 @@ def restore_rng_state(payload: Optional[Dict[str, Any]]) -> None:
     try:
         keys = tuple(int(value) for value in payload["python"])
         random.setstate((3, keys, int(payload.get("python_pos", 624))))
-    except Exception:  # pragma: no cover - defensive
+    except Exception: 
         logger.debug("Could not restore the Python RNG state")
     try:
         np.random.set_state(
@@ -96,22 +92,22 @@ def restore_rng_state(payload: Optional[Dict[str, Any]]) -> None:
                 float(payload["numpy_cached_gauss"]),
             )
         )
-    except Exception:  # pragma: no cover - defensive
+    except Exception:  
         logger.debug("Could not restore the NumPy RNG state")
     try:
         torch.set_rng_state(payload["torch"].cpu().to(torch.uint8))
-    except Exception:  # pragma: no cover - defensive
+    except Exception: 
         logger.debug("Could not restore the PyTorch RNG state")
     cuda_state = payload.get("torch_cuda")
     if cuda_state is not None and torch.cuda.is_available():
         try:
             torch.cuda.set_rng_state_all([tensor.cpu().to(torch.uint8) for tensor in cuda_state])
-        except Exception:  # pragma: no cover - defensive
+        except Exception: 
             logger.debug("Could not restore the CUDA RNG state")
 
 
 def _fsync_directory(directory: Path) -> None:
-    if os.name == "nt":  # Windows has no directory file descriptors.
+    if os.name == "nt": 
         return
     try:
         handle = os.open(str(directory), os.O_RDONLY)
@@ -190,7 +186,7 @@ def save_checkpoint(
         backup = ckpt_dir / (filename + ".bak")
         try:
             os.replace(str(target), str(backup))
-        except OSError:  # pragma: no cover - best effort only
+        except OSError:  
             logger.debug("Could not rotate %s to a backup", target)
 
     atomic_torch_save(payload, target)
@@ -254,9 +250,7 @@ def export_model_safetensors(
 
     source = Path(checkpoint_dir) / src_filename
     payload = load_checkpoint(str(source), torch.device("cpu"))
-    # Clone tensors so tied/shared storage cannot make safetensors reject the
-    # export. The regular best_model.pt remains the authoritative resumable
-    # checkpoint and contains metadata.
+
     state = {
         name: tensor.detach().cpu().contiguous().clone()
         for name, tensor in payload["model_state"].items()
@@ -369,8 +363,7 @@ def find_latest_checkpoint(
 
     phase = payload.get("phase", PHASE_EPOCH_COMPLETE)
     epoch = int(payload["epoch"])
-    # Only a fully scored epoch advances the counter; the other phases continue
-    # working on the epoch that was in flight.
+
     start_epoch = epoch + 1 if phase == PHASE_EPOCH_COMPLETE else epoch
 
     state = CheckpointState(
