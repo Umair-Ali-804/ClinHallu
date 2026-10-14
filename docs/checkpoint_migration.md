@@ -1,7 +1,7 @@
 # Checkpoint migration
 
-The refactor preserves GAER++ and legacy model attribute names, so state-dict
-keys from the supplied project remain valid.
+The refactor preserves the detector and legacy model attribute names, so
+state-dict keys from the supplied project remain valid.
 
 Copying is safer than moving. The migration script copies old files into a new
 run directory and leaves the source untouched:
@@ -11,6 +11,9 @@ python scripts/migrate_old_checkpoints.py \
   --old-checkpoint-dir checkpoints/distributed_study/pubmed10k_medhallu4k/seed_13 \
   --new-run-dir artifacts/adaptation/c5/seed_13
 ```
+
+The paper reports seeds 13, 42 and 77, so migrate each seed into its own
+directory (`seed_42`, `seed_77`) the same way.
 
 The new evaluator expects:
 
@@ -22,6 +25,9 @@ calibration/threshold.npy
 
 Do not rename parameters inside a checkpoint. Always verify migrated weights
 with `scripts/verify_results.py` before deleting or archiving the old project.
+Only migrate checkpoints trained on the same frozen data (C5: 14,000 train /
+4,000 validation / 1,000 evaluation) and the same configuration, otherwise the
+temperature and threshold will not match the weights.
 
 ## Checkpoints written before the resume rewrite
 
@@ -30,8 +36,8 @@ step-level resume state: `phase`, `batches_done`, `samples_done`,
 `epoch_progress`, `history` and `rng_state`.
 
 Older checkpoints are read without conversion. A payload with no `phase` field
-is treated as a completed epoch, so a resumed run starts at the following epoch
-— exactly the behaviour it had before. You lose only the finer granularity,
+is treated as a completed epoch, so a resumed run starts at the following epoch,
+exactly the behaviour it had before. You lose only the finer granularity,
 which the next checkpoint restores:
 
 ```bash
