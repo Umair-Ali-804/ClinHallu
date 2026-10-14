@@ -1,5 +1,3 @@
-"""Answer/evidence interaction features used by the GAER++ classifier."""
-
 from __future__ import annotations
 
 import torch
