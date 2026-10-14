@@ -1,5 +1,3 @@
-"""Validate and normalize user-provided fixed data splits without resampling."""
-
 import argparse
 import hashlib
 import json
@@ -32,7 +30,6 @@ NLI_INT_TO_STR: Dict[int, str] = {0: "entailment", 1: "neutral", 2: "contradicti
 
 
 def normalize_text(value) -> str:
-    """Convert scalar/list/dict dataset fields into stable plain text."""
     if value is None or (isinstance(value, float) and np.isnan(value)):
         return ""
     if isinstance(value, list):
@@ -89,8 +86,6 @@ def map_record(row: pd.Series) -> Dict:
         )
         raw_id = "auto-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
     record = {
-        # IDs are identifiers, not quantities.  Preserve string/UUID IDs instead
-        # of crashing by forcing every dataset's ID through int(...).
         "sample_id": raw_id.item() if hasattr(raw_id, "item") else raw_id,
         "question": str(row["question"]).strip(),
         "context": str(row["context"]).strip(),
@@ -111,13 +106,6 @@ def map_record(row: pd.Series) -> Dict:
 
 
 def canonical_group_key(record: Dict) -> str:
-    """Stable claim-family key used to keep factual/hallucinated pairs together.
-
-    MedHallu-style data commonly contains two answers for one question/context.
-    Splitting rows independently leaks the paired example into another split and
-    produces optimistic metrics.  IDs cannot be trusted (and eval data may not
-    have them), so group on normalized question + context content.
-    """
 
     def norm(value: str) -> str:
         return " ".join(str(value).casefold().split())
@@ -148,7 +136,7 @@ def assert_group_disjoint(*named_splits: Tuple[str, List[Dict]]) -> None:
 def cross_split_overlap_report(
     *named_splits: Tuple[str, List[Dict]],
 ) -> Dict[str, Dict[str, object]]:
-    """Return pairwise question/context overlap counts and example hashes."""
+
     keys = {
         name: {canonical_group_key(record) for record in records} for name, records in named_splits
     }
@@ -167,12 +155,7 @@ def cross_split_overlap_report(
 def remove_cross_split_overlap(
     splits: Dict[str, List[Dict]],
 ) -> Tuple[Dict[str, List[Dict]], List[Dict]]:
-    """Make fixed splits disjoint using eval > val > train priority.
 
-    No row is moved or resampled. Rows from a lower-priority split are removed
-    when their normalized question+context group already occurs in a protected
-    higher-priority split. Removed rows are returned for an audit JSONL.
-    """
     cleaned = {name: list(rows) for name, rows in splits.items()}
     removed: List[Dict] = []
 
@@ -257,8 +240,7 @@ def _validate_dataframe(df: pd.DataFrame, source_path: str) -> List[Dict]:
     if df.empty:
         raise ValueError(f"{source_path} contains no records")
     df.columns = [c.strip().lower() for c in df.columns]
-    # Accept common MedHallu/PubMedQA field names directly. Canonical fields
-    # always win when both canonical and alias columns are present.
+
     rename = {}
     for canonical, aliases in FIELD_ALIASES.items():
         if canonical not in df.columns:
@@ -354,7 +336,6 @@ def run_fixed_preprocessing(
     eval_input: str,
     overlap_policy: Optional[str] = None,
 ) -> None:
-    """Normalize three user-defined splits; never sample or re-split records."""
     cfg = load_config(config_path)
     processed_dir = Path(cfg["data"]["processed_dir"])
     splits = {
@@ -367,7 +348,6 @@ def run_fixed_preprocessing(
             raise ValueError(f"{name} input contains no valid records")
         log_split_stats(name.upper(), rows)
 
-    # Fixed files are authoritative: never silently move, delete, or resplit.
     policy = (
         overlap_policy
         or cfg["data"].get("overlap_policy")
