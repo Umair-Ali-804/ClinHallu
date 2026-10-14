@@ -17,7 +17,6 @@ STATUS_FAILED = "failed"
 STATUS_INTERRUPTED = "interrupted"
 STATUS_SKIPPED = "skipped"
 
-#: Statuses that mean "do this again on the next invocation".
 RESUMABLE_STATUSES = {STATUS_PENDING, STATUS_RUNNING, STATUS_FAILED, STATUS_INTERRUPTED}
 
 
@@ -26,13 +25,11 @@ def _now() -> str:
 
 
 def fingerprint(payload: Any) -> str:
-    """Stable hash of any JSON-serialisable description of a unit's inputs."""
     encoded = json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()[:16]
 
 
 class Ledger:
-    """Atomic, append-friendly completion record for a set of named units."""
 
     def __init__(self, path: str | Path, *, name: str = "run") -> None:
         self.path = Path(path)
@@ -65,7 +62,6 @@ class Ledger:
         return self.entry(unit).get("status", STATUS_PENDING)
 
     def is_complete(self, unit: str, *, fingerprint_value: Optional[str] = None) -> bool:
-        """True only when the unit finished *and* its inputs are unchanged."""
         entry = self.entry(unit)
         if entry.get("status") != STATUS_COMPLETED:
             return False
