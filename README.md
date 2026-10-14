@@ -5,8 +5,7 @@
 [![Transformers](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-4.57.6-ffcc4d)](https://huggingface.co/docs/transformers)
 [![OpenRouter](https://img.shields.io/badge/OpenRouter-LLM%20judges-6467f2?logo=openai&logoColor=white)](https://openrouter.ai/)
 
-Code for the paper **"ClinHallu: Measuring Domain Shift and the Over-Flagging Bias in Medical Hallucination Detection"** (Umair Ali, Mamoona Tasadduq, Javed Ali Khan). Repository: <https://github.com/Umair-Ali-804/ClinHallu>.
-
+Code for the paper **"ClinHallu: Measuring Domain Shift and the Over-Flagging Bias in Medical Hallucination Detection"** (Umair Ali, Mamoona Tasadduq, Javed Ali Khan).
 **Datasets**
 
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-PubMedQA-ffcc4d)](https://huggingface.co/datasets/qiaojin/PubMedQA)
