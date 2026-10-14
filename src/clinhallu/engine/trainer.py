@@ -166,11 +166,6 @@ def _optimizer_step(model, optimizer, scheduler, scaler, max_grad_norm: float) -
 
 
 class EpochAccumulator:
-    """Running labels/scores/loss for one epoch, serialisable into a checkpoint.
-
-    Mid-epoch resume has to restore these too, otherwise the epoch's reported
-    metrics would only describe the batches seen after the crash.
-    """
 
     def __init__(self, state: Optional[dict] = None) -> None:
         state = state or {}
@@ -244,8 +239,6 @@ def run_epoch(
         total=total_batches,
     )
     for local_step, raw_batch in enumerate(progress):
-        # Index within the full epoch, so accumulation groups stay aligned
-        # across a resume.
         step = start_batch + local_step
         batch = _move_batch(raw_batch, device)
         labels = batch.pop("labels", None)
@@ -284,8 +277,6 @@ def run_epoch(
         if training and pending_step and batches_done % gradient_accumulation_steps == 0:
             _optimizer_step(model, optimizer, scheduler, scaler, max_grad_norm)
             pending_step = False
-            # No gradients are pending here, so the state on disk is a exact
-            # description of the run: the safest possible place to checkpoint.
             if checkpoint_hook is not None:
                 checkpoint_hook(batches_done, samples_done, accumulator)
             if guard is not None and guard.triggered:
@@ -513,7 +504,6 @@ def train(
             )
             skip_batches, skip_samples, resume_progress = 0, 0, None
 
-        # Phase 1: the training pass, unless a checkpoint says it already finished.
         if resume_here and state.needs_validation_only:
             logger.info("Skipping the epoch %d training pass; it completed before the stop.", epoch)
             training = {
@@ -601,8 +591,7 @@ def train(
                 interrupted = True
                 break
 
-            # The training pass is complete but unscored. Recording that fact
-            # means an interruption during validation does not repeat the epoch.
+    
             persist(
                 epoch=epoch,
                 phase=PHASE_EPOCH_TRAINED,
@@ -611,8 +600,6 @@ def train(
                 epoch_progress=training["progress_state"],
                 step=global_step,
             )
-
-        # Phase 2: validation and checkpoint selection.
         validation = run_epoch(
             model,
             validation_loader,
@@ -674,7 +661,6 @@ def train(
             step=global_step,
             is_best=is_best,
         )
-        # Consumed: later epochs start fresh rather than inheriting this state.
         state = CheckpointState()
 
         if patience >= int(cfg["training"]["early_stopping_patience"]):
