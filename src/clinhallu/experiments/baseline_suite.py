@@ -1,11 +1,3 @@
-"""Resolve baseline YAML files and execute each method in a fresh process.
-
-The suite writes its ledger after every individual baseline rather than once at
-the end, so an interruption part-way through leaves an accurate record. The next
-invocation skips the baselines that already produced predictions and continues
-with the rest.
-"""
-
 from __future__ import annotations
 
 import json
@@ -154,7 +146,6 @@ def run_baseline_suite(
             if not continue_on_error:
                 _write_status(status_path, status)
                 raise RuntimeError(f"Baseline run failed: {instance_name}")
-        # Persist after every baseline so an abrupt stop cannot erase the record.
         _write_status(status_path, status)
 
     if failures:
