@@ -1,5 +1,3 @@
-"""Build publication tables and figures from completed runs."""
-
 from __future__ import annotations
 
 import argparse
