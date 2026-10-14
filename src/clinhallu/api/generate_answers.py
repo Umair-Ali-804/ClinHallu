@@ -1,5 +1,3 @@
-"""Generate five independent sampled passages for official-style SelfCheckGPT."""
-
 from __future__ import annotations
 
 import argparse
