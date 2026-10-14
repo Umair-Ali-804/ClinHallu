@@ -1,5 +1,3 @@
-"""Content-addressed score cache for expensive neural baselines."""
-
 from __future__ import annotations
 
 import hashlib
