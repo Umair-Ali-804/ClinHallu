@@ -1,8 +1,3 @@
-"""Data schemas, validation, preprocessing and model-ready datasets.
-
-Dataset imports are lazy so lightweight validation and preprocessing commands
-do not initialize PyTorch or Transformers.
-"""
 
 from .validation import validate_fixed_splits
 
