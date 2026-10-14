@@ -1,5 +1,3 @@
-"""Write aligned per-example predictions for audit and error analysis."""
-
 from __future__ import annotations
 
 import json
