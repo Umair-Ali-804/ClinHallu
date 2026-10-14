@@ -1,5 +1,3 @@
-"""Construct a configured model in one place for training and evaluation."""
-
 from __future__ import annotations
 
 from typing import Mapping
