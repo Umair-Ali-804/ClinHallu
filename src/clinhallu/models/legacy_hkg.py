@@ -1,4 +1,3 @@
-"""Legacy HKG-Fusion model retained for checkpoint compatibility."""
 
 from __future__ import annotations
 
@@ -16,12 +15,7 @@ from .outputs import HKGFusionOutput
 
 
 class HKGFusionModelV2(nn.Module):
-    """Original two-class HKG-Fusion architecture.
-
-    Attribute names and tensor operations are unchanged from the supplied
-    project so old ``best_model.pt`` state dictionaries remain compatible.
-    """
-
+    
     def __init__(
         self,
         model_name: str = "microsoft/deberta-v3-base",
