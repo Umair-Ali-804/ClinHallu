@@ -1,4 +1,3 @@
-"""Offline API protocol tests: no network or paid completions."""
 
 import io
 import json
@@ -135,9 +134,6 @@ def test_single_generation_reused_by_both_baselines(project):
     assert len(records) == 2 and set(records[0]) == {"id", "question", *ANSWER_KEYS}
     assert not (project / "answers/validation_answers.json").exists()
     first = shared(project, "selfcheckgpt")
-    # Both methods reuse the same generated passages without another API call.
-    # Their local scorers are intentionally distinct: official SelfCheckNLI for
-    # SelfCheckGPT and pairwise NLI voting for self-consistency.
     second = shared(project, "self_consistency", scorer_factory=fake_nli_factory)
     assert first["f1"] == second["f1"] == 1 and first["threshold"] == second["threshold"] == 0.5
     assert "brier" not in first and "ece" not in second
