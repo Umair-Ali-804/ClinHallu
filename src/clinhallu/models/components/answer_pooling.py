@@ -5,7 +5,6 @@ import torch.nn as nn
 
 
 class AnswerAttentionPool(nn.Module):
-    """Learn a masked attention distribution over answer tokens."""
 
     def __init__(self, hidden_dim: int = 768, attn_hidden_dim: int = 256) -> None:
         super().__init__()
