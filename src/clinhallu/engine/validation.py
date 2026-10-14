@@ -1,5 +1,3 @@
-"""Helpers shared by epoch validation and final calibration."""
-
 from __future__ import annotations
 
 import contextlib
