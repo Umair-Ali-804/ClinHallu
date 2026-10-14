@@ -1,5 +1,3 @@
-"""DeBERTa encoder loading, LoRA attachment, and trainability audits."""
-
 from __future__ import annotations
 
 import logging
@@ -136,8 +134,7 @@ class MedEncoderV2(nn.Module):
         )
         encoder = get_peft_model(base_encoder, peft_cfg)
 
-        # Without this, LoRA parameters inside gradient-checkpointed layers receive no
-        # gradients, because the checkpointed block sees no input with requires_grad=True.
+
         if hasattr(encoder, "enable_input_require_grads"):
             encoder.enable_input_require_grads()
             logger.info("MedEncoderV2: enabled input gradients for LoRA + gradient checkpointing")
