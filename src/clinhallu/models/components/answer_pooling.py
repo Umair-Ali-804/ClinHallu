@@ -1,5 +1,3 @@
-"""Answer-token pooling used by GAER++."""
-
 from __future__ import annotations
 
 import torch
@@ -11,8 +9,6 @@ class AnswerAttentionPool(nn.Module):
 
     def __init__(self, hidden_dim: int = 768, attn_hidden_dim: int = 256) -> None:
         super().__init__()
-        # Attribute names intentionally match the original implementation so
-        # existing GAER++ state dictionaries load without key translation.
         self.proj = nn.Linear(hidden_dim, attn_hidden_dim)
         self.score = nn.Linear(attn_hidden_dim, 1, bias=False)
 
