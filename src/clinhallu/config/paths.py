@@ -1,5 +1,3 @@
-"""Project-root and path helpers that do not depend on the current directory."""
-
 from __future__ import annotations
 
 import os
@@ -7,10 +5,6 @@ from pathlib import Path
 
 
 def find_project_root(start: str | Path | None = None) -> Path:
-    """Find the directory containing ``pyproject.toml``.
-
-    ``CLINHALLU_ROOT`` can be set explicitly in unusual notebook layouts.
-    """
 
     explicit = os.environ.get("CLINHALLU_ROOT")
     if explicit:
