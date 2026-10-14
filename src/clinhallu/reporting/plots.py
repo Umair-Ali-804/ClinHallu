@@ -1,5 +1,3 @@
-"""Plotting functions for experiment diagnostics and publication figures."""
-
 import json
 import logging
 from pathlib import Path
