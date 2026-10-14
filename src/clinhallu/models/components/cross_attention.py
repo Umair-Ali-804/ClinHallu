@@ -1,4 +1,3 @@
-"""Masked answer/context cross-attention for context-derived evidence."""
 
 from __future__ import annotations
 
@@ -9,13 +8,7 @@ import torch.nn as nn
 
 
 class BidirectionalCrossAttention(nn.Module):
-    """Answer/context cross-attention without residual evidence mixing.
-
-    The answer-to-context output is derived only from context values, so the
-    downstream evidence vector cannot accidentally pool answer states. Empty
-    masks receive one fallback key to prevent attention NaNs.
-    """
-
+    
     def __init__(self, hidden_dim: int = 768, num_heads: int = 8, dropout: float = 0.1) -> None:
         super().__init__()
         self.answer_to_context = nn.MultiheadAttention(
