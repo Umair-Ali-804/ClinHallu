@@ -1,4 +1,3 @@
-"""Durable run-state tracking for safe resume behavior."""
 
 from __future__ import annotations
 
