@@ -33,16 +33,7 @@ def run_ablations(
     continue_on_error: bool = False,
     **kwargs,
 ) -> list[dict]:
-    """Train and evaluate each requested variant, skipping finished ones.
-
-    Args:
-        variants: variant letters, any of ``B C D E F``.
-        resume: when false, recorded outcomes are discarded and every variant
-            runs again from scratch.
-        continue_on_error: keep going after a variant fails, so one bad variant
-            does not block the other four. Failures are still raised at the end.
-    """
-
+ 
     root = find_project_root()
     keys = []
     for variant in variants:
@@ -51,8 +42,7 @@ def run_ablations(
             raise ValueError(f"Unknown variant {variant!r}; choose from B C D E F")
         keys.append(key)
 
-    # A seed change produces a different run directory, so it belongs in the
-    # unit key rather than in a fingerprint.
+
     seed = kwargs.get("seed")
     ledger = Ledger(ablation_ledger_path(root), name="ablations")
     if not resume:
