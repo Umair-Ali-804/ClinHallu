@@ -1,5 +1,3 @@
-"""Legacy support-weighted evidence pooling for HKG-Fusion checkpoints."""
-
 from __future__ import annotations
 
 import torch
