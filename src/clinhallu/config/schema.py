@@ -1,13 +1,9 @@
-"""Dependency-free validation for experiment configuration dictionaries."""
-
 from __future__ import annotations
 
 from typing import Any, Mapping
 
 
 class ConfigError(ValueError):
-    """Raised when a run configuration is incomplete or inconsistent."""
-
 
 def _require(mapping: Mapping[str, Any], key: str, section: str) -> Any:
     if key not in mapping:
