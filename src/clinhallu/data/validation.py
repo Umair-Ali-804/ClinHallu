@@ -1,5 +1,3 @@
-"""Validate fixed raw splits before preprocessing or training."""
-
 from __future__ import annotations
 
 from collections import Counter
