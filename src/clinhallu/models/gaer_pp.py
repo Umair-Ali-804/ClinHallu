@@ -1,5 +1,3 @@
-"""Primary GAER++ model and its component-isolated ablation modes."""
-
 from __future__ import annotations
 
 from typing import Optional
@@ -16,10 +14,6 @@ from .components.interaction import AnswerEvidenceInteraction
 from .encoder import MedEncoderV2
 from .outputs import GAERPlusPlusOutput
 
-# The ablation ladder is cumulative. B adds answer pooling, C adds
-# cross-attention, D adds learned grounding, E exposes evidence statistics,
-# and F adds contradiction-sensitive interaction features. Data-pipeline
-# ablations belong in configuration rather than in this model.
 _GAER_ABLATION_CONFIGS: dict = {
     None: dict(
         use_answer_pool=True,
@@ -77,7 +71,7 @@ _GAER_ABLATION_CONFIGS: dict = {
         use_stats=True,
         include_cls=False,
     ),
-    # Experimental only: the primary GAER++ classifier does not include CLS.
+
     "gaer_plus_plus_with_cls": dict(
         use_answer_pool=True,
         use_cross_attn=True,
@@ -88,7 +82,6 @@ _GAER_ABLATION_CONFIGS: dict = {
     ),
 }
 
-# Backward-compatible aliases preserve old configs and checkpoints.
 _GAER_ABLATION_CONFIGS["deberta_baseline"] = dict(
     use_answer_pool=False,
     use_cross_attn=False,
@@ -223,8 +216,7 @@ class GAERPlusPlusModel(nn.Module):
         h = H
 
         if flags["use_cross_attn"]:
-            # The reverse branch is not consumed by GAER++, so skip it to save
-            # memory and compute on a Colab T4.
+
             z, _, _, _ = self.cross_attention(
                 H,
                 context_mask,
@@ -244,11 +236,9 @@ class GAERPlusPlusModel(nn.Module):
             use_grounding=flags["use_grounding"],
         )
         if not flags["use_cross_attn"]:
-            # No context signal at all in this ablation rung -> evidence is zero.
             e = torch.zeros_like(e)
 
         if flags["use_answer_pool"]:
-            # a = Linear([H_CLS ; AttentionPool(H_A)])
             a = self.answer_representation(h, c, answer_mask, attention_mask)
         else:
             a = torch.zeros_like(c)
