@@ -1,5 +1,3 @@
-"""Inspect current OpenRouter model IDs and supported parameters."""
-
 import argparse
 import json
 
