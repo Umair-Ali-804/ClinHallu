@@ -1,14 +1,3 @@
-"""Training engine for GAER++ and the backward-compatible legacy model.
-
-Training is crash-safe at *optimizer-step* granularity. A checkpoint is written
-every ``checkpoints.save_every_steps`` optimizer steps and at least every
-``checkpoints.save_every_minutes`` minutes, always at a boundary where no
-gradients are pending. Re-running the same command continues from that point:
-the same epoch, the same position in that epoch's shuffled order, the same
-optimizer/scheduler/AMP state, the same RNG streams, and the same partially
-accumulated epoch metrics.
-"""
-
 from __future__ import annotations
 
 import argparse
