@@ -1,5 +1,3 @@
-"""External prompts with literal JSON substitution, never Python format strings."""
-
 import json
 
 from clinhallu.config.paths import absolute_path
