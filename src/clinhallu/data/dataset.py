@@ -1,5 +1,3 @@
-"""Exact segment tokenization, datasets, collation, and data loaders."""
-
 from __future__ import annotations
 
 import json
