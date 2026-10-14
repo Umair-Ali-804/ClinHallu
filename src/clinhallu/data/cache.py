@@ -1,4 +1,3 @@
-"""Content-addressed, compact tokenization caches for processed splits."""
 
 from __future__ import annotations
 
