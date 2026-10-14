@@ -1,5 +1,3 @@
-"""Cross-split claim-family leakage checks."""
-
 from .preprocessing import (
     assert_group_disjoint,
     canonical_group_key,
