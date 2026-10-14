@@ -1,11 +1,3 @@
-"""End-to-end: interrupt a real training run, restart it, and check the result.
-
-This exercises the whole path a user hits when Colab disconnects mid-epoch --
-real tokenizer, real DeBERTa (tiny), real optimizer, real checkpoint files, real
-subprocess boundaries -- rather than a simulation of it. The reused fixture
-builds a self-contained project on disk with no network access.
-"""
-
 from __future__ import annotations
 
 import json
