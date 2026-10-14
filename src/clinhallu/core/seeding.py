@@ -1,8 +1,3 @@
-"""Centralized `set_seed()` covering every RNG source that affects
-reproducibility: Python's `random`, NumPy, PyTorch CPU, PyTorch CUDA (all
-devices), and PyTorch DataLoader worker seeding.
-"""
-
 from __future__ import annotations
 
 import os
@@ -19,11 +14,8 @@ def set_seed(seed: int, deterministic_cudnn: bool = False) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)  # all GPUs, not just the current device
+        torch.cuda.manual_seed_all(seed) 
     if deterministic_cudnn:
-        # Slower but bit-exact; off by default since GAER++ training speed on
-        # a single T4 already matters (spec section 21).
-        torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
 
 
