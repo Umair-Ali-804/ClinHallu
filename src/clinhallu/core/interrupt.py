@@ -7,8 +7,6 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-#: Exit code used when a run stopped cleanly at a resumable boundary. Chosen to
-#: match the shell convention for "terminated by SIGINT" (128 + 2).
 INTERRUPTED_EXIT_CODE = 130
 
 _HANDLED_SIGNALS = ("SIGINT", "SIGTERM", "SIGHUP", "SIGBREAK")
@@ -49,8 +47,7 @@ class InterruptGuard:
     def _handle(self, signal_number: int, _frame) -> None:
         name = signal.Signals(signal_number).name
         if self._event.is_set():
-            # Second signal: restore the default behaviour and re-raise so the
-            # user can always force an exit.
+
             logger.warning("Second %s received -- exiting immediately.", name)
             signal.signal(signal_number, signal.SIG_DFL)
             signal.raise_signal(signal_number)
@@ -70,19 +67,18 @@ class InterruptGuard:
         for name in _HANDLED_SIGNALS:
             number = getattr(signal, name, None)
             if number is None:
-                continue  # SIGHUP/SIGBREAK are platform specific.
+                continue 
             try:
                 self._previous[number] = signal.getsignal(number)
                 signal.signal(number, self._handle)
             except (ValueError, OSError):
-                # Raised when not on the main thread; polling simply never fires.
                 logger.debug("Could not install a handler for %s", name)
         return self
 
     def __exit__(self, *_exc) -> None:
         for number, handler in self._previous.items():
             try:
-                signal.signal(number, handler)  # type: ignore[arg-type]
+                signal.signal(number, handler)  
             except (ValueError, OSError, TypeError):
                 pass
         self._previous.clear()
