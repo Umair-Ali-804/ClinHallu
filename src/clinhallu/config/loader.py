@@ -1,5 +1,3 @@
-"""Load layered YAML configs and resolve all paths from the project root."""
-
 from __future__ import annotations
 
 import copy
@@ -64,7 +62,6 @@ def resolve_config(
     project_root: str | Path | None = None,
     config_path: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Resolve a loaded configuration without creating a temporary YAML file."""
 
     cfg = copy.deepcopy(config)
     root = find_project_root(project_root)
