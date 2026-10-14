@@ -1,5 +1,3 @@
-"""Create adaptation and ablation CSV/Markdown tables from run artifacts."""
-
 from __future__ import annotations
 
 import csv
