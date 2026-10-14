@@ -1,12 +1,4 @@
-"""Run independently trained GAER++ ablation variants, resumably.
 
-Five variants trained back to back is the longest unattended job in the project
-and therefore the one most likely to be cut short. A ledger under
-``artifacts/ablations`` records each variant's outcome the moment it changes, so
-re-running the same command skips the variants that finished, resumes the one
-that was in flight from its own training checkpoint, and continues with the
-rest.
-"""
 
 from __future__ import annotations
 
