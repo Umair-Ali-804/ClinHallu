@@ -1,5 +1,3 @@
-"""Official-style SelfCheckGPT-NLI over five independent sampled passages."""
-
 from __future__ import annotations
 
 import argparse
@@ -18,7 +16,6 @@ OFFICIAL_VARIANT = "SelfCheckGPT-NLI"
 
 
 class OfficialSelfCheckNLI:
-    """Adapter around the SelfCheckGPT package's recommended NLI variant."""
 
     def __init__(self, device=None):
         import torch
