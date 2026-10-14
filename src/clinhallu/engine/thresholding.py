@@ -1,5 +1,3 @@
-"""Validation-only decision-threshold selection."""
-
 from __future__ import annotations
 
 from typing import Optional
@@ -12,7 +10,6 @@ def search_threshold(
     labels: np.ndarray,
     candidates: Optional[np.ndarray] = None,
 ) -> tuple[float, float]:
-    """Maximize positive-class F1; break ties by higher recall."""
 
     if candidates is None:
         candidates = np.arange(0.05, 0.951, 0.01)
