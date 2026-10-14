@@ -1,5 +1,3 @@
-"""Minimal OpenRouter client; raw completions are cached before validation."""
-
 from __future__ import annotations
 
 import hashlib
@@ -67,8 +65,7 @@ def build_request(model, messages, schema, name, settings):
     if (temperature is not None and not 0 <= temperature <= 2) or max_tokens <= 0:
         raise ValueError("temperature must be in [0,2] and max_tokens positive")
     request = dict(model=model, messages=messages, stream=False, max_tokens=max_tokens)
-    # GPT-5-family and some reasoning endpoints reject custom temperature.
-    # YAML `temperature: null` deliberately omits that request parameter.
+  
     if temperature is not None:
         request["temperature"] = temperature
     mode = settings.get("response_format", "json_schema")
@@ -89,7 +86,6 @@ def build_request(model, messages, schema, name, settings):
     for key in ("reasoning", "seed"):
         if key in settings:
             request[key] = settings[key]
-    # Intentionally no n=5: all five answers are returned inside ONE completion.
     return request
 
 
