@@ -1,5 +1,3 @@
-"""Project-wide names that define the protocol."""
-
 LABEL_GROUNDED = 0
 LABEL_HALLUCINATED = 1
 DEFAULT_SEED = 13
