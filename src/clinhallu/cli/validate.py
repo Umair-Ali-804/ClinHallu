@@ -1,5 +1,3 @@
-"""Validate data counts, labels, JSONL schema and cross-split disjointness."""
-
 from __future__ import annotations
 
 import argparse
