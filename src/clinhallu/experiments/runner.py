@@ -1,12 +1,3 @@
-"""Single idempotent runner for preparation, training and frozen evaluation.
-
-Every stage is recorded in a ledger inside the run directory as it starts and
-finishes, so re-invoking the same command after a crash walks straight past the
-stages that already completed and picks up the first one that did not. Training
-itself resumes from its own checkpoint, so even a stage that was half-finished
-continues rather than restarting.
-"""
-
 from __future__ import annotations
 
 import hashlib
