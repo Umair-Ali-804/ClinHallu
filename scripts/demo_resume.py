@@ -1,13 +1,3 @@
-"""Prove the interrupt-and-resume path end to end, as a user would hit it.
-
-Builds a tiny self-contained project, starts a real training subprocess, sends
-it SIGINT part-way through (what a Colab disconnect or Ctrl-C delivers), then
-re-runs the identical command and checks that it continued rather than
-restarting.
-
-    python scripts/demo_resume.py
-"""
-
 from __future__ import annotations
 
 import json
@@ -160,12 +150,10 @@ def main() -> int:
     run_dir = root / "artifacts" / "adaptation" / "c5" / "seed_13"
     latest = run_dir / "checkpoints" / "latest_checkpoint.pt"
 
-    # --- attempt 1: interrupted like a dropped session -------------------- #
     print("Attempt 1: starting training, interrupting once a mid-epoch save lands...")
     process = subprocess.Popen(
         command, cwd=root, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
     )
-    # Wait for the first mid-epoch checkpoint, then pull the plug immediately.
     deadline = time.monotonic() + 240
     while time.monotonic() < deadline:
         if latest.is_file():
@@ -198,7 +186,6 @@ def main() -> int:
     if before["phase"] != "in_epoch":
         print("  (note: the stop landed on an epoch boundary rather than mid-epoch)")
 
-    # --- attempt 2: the identical command, uninterrupted ------------------- #
     print("Attempt 2: re-running the identical command...")
     completed = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
     print(f"  exit code: {completed.returncode}")
