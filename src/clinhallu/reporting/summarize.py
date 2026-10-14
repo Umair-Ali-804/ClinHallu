@@ -1,5 +1,3 @@
-"""Aggregate external baseline runs into tables, summaries, and figures."""
-
 from __future__ import annotations
 
 import argparse
