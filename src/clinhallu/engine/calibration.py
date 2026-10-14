@@ -1,5 +1,3 @@
-"""Temperature scaling fitted exclusively on validation logits."""
-
 from __future__ import annotations
 
 import json
@@ -23,8 +21,7 @@ def fit_temperature(
     if logits.numel() != labels.numel():
         raise ValueError("Validation logits and labels must have the same length")
 
-    # Optimizing log(T) makes positivity structural instead of relying on a
-    # clamp whose zero-gradient region can trap the optimizer.
+
     log_temperature = torch.nn.Parameter(torch.zeros(1, device=logits.device, dtype=logits.dtype))
     optimizer = torch.optim.LBFGS([log_temperature], lr=learning_rate, max_iter=max_iter)
 
