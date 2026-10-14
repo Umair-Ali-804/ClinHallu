@@ -1,5 +1,3 @@
-"""Classification heads for GAER++ and legacy HKG-Fusion models."""
-
 from __future__ import annotations
 
 import torch
