@@ -1,4 +1,4 @@
-"""Publication baselines and their shared fixed-split protocol."""
+"""baselines and their shared fixed-split protocol."""
 
 from .registry import REGISTRY
 
