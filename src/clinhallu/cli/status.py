@@ -1,10 +1,3 @@
-"""Report what is already finished and what a re-run would still have to do.
-
-Answering "if I run this again, what happens?" before committing a GPU session
-is the point of this command. It reads the same ledgers and checkpoints the
-runners use, so what it prints is exactly what they will act on.
-"""
-
 from __future__ import annotations
 
 import argparse
