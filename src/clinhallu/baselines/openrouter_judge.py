@@ -1,5 +1,3 @@
-"""Evaluation-only LLM judges through OpenRouter, with strict cached outputs."""
-
 import json
 import math
 from pathlib import Path
