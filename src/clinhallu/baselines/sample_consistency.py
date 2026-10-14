@@ -1,5 +1,3 @@
-"""Two detector adaptations using the same five context-conditioned answers."""
-
 from __future__ import annotations
 
 import argparse
