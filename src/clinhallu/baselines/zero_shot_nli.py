@@ -1,5 +1,3 @@
-"""Claim-level zero-shot natural-language-inference baseline."""
-
 from __future__ import annotations
 
 import argparse
@@ -12,7 +10,6 @@ from .common import finish_run
 from .data import load_splits, sentence_split
 
 KNOWN_LABEL_ORDERS = {
-    # Official model card order: contradiction, entailment, neutral.
     "cross-encoder/nli-deberta-v3-base": (1, 0),
 }
 
