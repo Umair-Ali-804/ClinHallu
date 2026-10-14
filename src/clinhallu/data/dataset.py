@@ -34,11 +34,7 @@ class HKGFusionDataset(Dataset):
         self.tokenizer = tokenizer
         self.max_length = max_length
         self.require_labels = require_labels
-        # The primary config enables answer-aware selection; ablations can
-        # disable it without changing dataset code.
         self.context_selection = context_selection or ContextSelectionConfig(enabled=False)
-        # Question and answer receive hard caps. Context uses the remaining
-        # budget after four special tokens.
         self.question_budget = question_budget
         self.answer_budget = answer_budget
         self.samples = self._load(jsonl_path)
@@ -114,23 +110,17 @@ class HKGFusionDataset(Dataset):
 
         c_ids = self.tokenizer.encode(context, add_special_tokens=False)
         if len(c_ids) > context_budget:
-            # Context has already been ranked/selected upstream (when context
-            # selection is enabled) so the highest-scoring sentences appear
-            # first; a simple prefix truncation to the remaining budget keeps
-            # the most relevant material. When context selection is
-            # disabled, this is a plain beginning-truncation of the raw
-            # context. The cut point comes from the explicit segment budget.
             c_ids = c_ids[:context_budget]
 
         input_ids = [cls_id] + q_ids + [sep_id] + c_ids + [sep_id] + a_ids + [sep_id]
 
         q_start = 1
         q_end = q_start + len(q_ids)
-        c_start = q_end + 1  # skip [SEP]
+        c_start = q_end + 1  
         c_end = c_start + len(c_ids)
-        a_start = c_end + 1  # skip [SEP]
+        a_start = c_end + 1 
         a_end = a_start + len(a_ids)
-        # (final [SEP] at index a_end, unmasked in all three segment masks)
+
 
         seq_len = len(input_ids)
         question_mask = [0] * seq_len
@@ -236,8 +226,6 @@ def build_dataloaders_v2(
 
     context_selection = context_selection_from_config(cfg)
 
-    # A smoke test intentionally tokenizes only its small subset; building a
-    # full 14k-row cache first would defeat the purpose of a quick check.
     if cfg["data"].get("use_cache", True) and not smoke_test:
         from .cache import load_or_build_feature_dataset
 
@@ -262,10 +250,6 @@ def build_dataloaders_v2(
         )
 
     if smoke_test:
-        # Cap to ~1000 train examples / a small validation slice, so a
-        # full pass (load -> tokenize -> forward -> backward -> optimizer ->
-        # validate -> F1 -> threshold -> checkpoint) can be verified quickly
-        # before committing to a full run.
         train_ds = Subset(train_ds, list(range(min(smoke_test_n, len(train_ds)))))
         val_ds = Subset(val_ds, list(range(min(max(smoke_test_n // 5, 50), len(val_ds)))))
         logger.warning(
@@ -282,9 +266,7 @@ def build_dataloaders_v2(
         "worker_init_fn": worker_init_fn,
         "persistent_workers": num_workers > 0,
     }
-    # A per-epoch deterministic sampler rather than shuffle=True: the order for
-    # epoch k depends only on (seed, k), so an interrupted run can resume in the
-    # middle of an epoch without repeating or skipping examples.
+
     train_sampler = ResumableRandomSampler(train_ds, seed=int(cfg["training"]["seed"]))
     train_loader = DataLoader(
         train_ds,
