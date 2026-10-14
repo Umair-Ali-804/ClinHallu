@@ -1,5 +1,3 @@
-"""Check the active Python/Colab environment before an expensive run."""
-
 from __future__ import annotations
 
 import argparse
