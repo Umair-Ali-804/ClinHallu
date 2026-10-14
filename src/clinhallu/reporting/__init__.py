@@ -1,4 +1,3 @@
-"""Tables, plots, statistical tests and publication exports."""
 
 from .publication_export import build_publication_outputs
 
