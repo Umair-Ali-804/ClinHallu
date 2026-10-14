@@ -1,5 +1,3 @@
-"""Registry of supported publication baseline implementations."""
-
 from .base import BaselineSpec
 
 REGISTRY = {
