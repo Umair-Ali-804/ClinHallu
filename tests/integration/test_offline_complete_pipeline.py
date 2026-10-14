@@ -1,4 +1,3 @@
-"""Actual tiny-model training and evaluation, without downloads or API calls."""
 
 import json
 import shutil
