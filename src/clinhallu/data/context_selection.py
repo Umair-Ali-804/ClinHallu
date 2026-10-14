@@ -1,5 +1,3 @@
-"""Label-free, answer-aware sentence selection for long contexts."""
-
 from __future__ import annotations
 
 import re
@@ -108,22 +106,7 @@ def select_context_sentences(
     cfg: ContextSelectionConfig | None = None,
     tokenizer=None,
 ) -> str:
-    """Answer-aware, unsupervised sentence-level context selection.
 
-    Scores each context sentence by lexical overlap (Jaccard on lowercased
-    non-stopword tokens) with the question and answer, plus a bonus for
-    "entity-like" overlap (capitalized terms, numbers, percentages,
-    p-values).
-    No labels are used anywhere in this scoring. Selected sentences are
-    re-ordered to their ORIGINAL position in the context (never shuffled),
-    and selection stops once either `max_sentences` or an approximate
-    `max_context_tokens` budget (whitespace-token count, or tokenizer count
-    if a tokenizer is supplied) is reached. If nothing scores above zero
-    (e.g. a context totally unrelated to the Q/A -- which itself may be a
-    signal of hallucination and should NOT be silently discarded), we fall
-    back to keeping the original context so an unrelated passage is not
-    silently discarded.
-    """
     cfg = cfg or ContextSelectionConfig()
     if not cfg.enabled or not context.strip():
         return context
@@ -149,8 +132,7 @@ def select_context_sentences(
         scored.append((idx, sent, score))
 
     if all(s[2] == 0.0 for s in scored):
-        # No lexical signal at all -- keep the full context rather than
-        # guessing; an unrelated context is informative, not noise.
+
         return context
 
     ranked = sorted(scored, key=lambda x: x[2], reverse=True)
