@@ -1,6 +1,3 @@
-"""ClinHallu-specific exceptions."""
-
-
 class ClinHalluError(RuntimeError):
     """Base error for failures that should be shown directly to CLI users."""
 
