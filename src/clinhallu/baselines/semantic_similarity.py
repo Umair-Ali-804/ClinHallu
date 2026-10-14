@@ -1,5 +1,3 @@
-"""Claim-level biomedical semantic-similarity baseline."""
-
 from __future__ import annotations
 
 import argparse
@@ -13,12 +11,6 @@ from .data import load_splits, sentence_split
 
 
 def load_sentence_encoder(model_name: str, revision: str):
-    """Load current and legacy SentenceTransformers checkpoints.
-
-    Some older checkpoints store the pooling dimension under a legacy key.
-    Rebuilding their standard Transformer + mean-pooling stack preserves the
-    intended operation without modifying the Hugging Face cache.
-    """
 
     from sentence_transformers import SentenceTransformer
     from sentence_transformers.sentence_transformer import modules
@@ -48,7 +40,6 @@ def load_sentence_encoder(model_name: str, revision: str):
 
 
 def normalized_hallucination_score(similarity) -> np.ndarray:
-    """Map cosine support from [-1, 1] to hallucination score [1, 0]."""
 
     return np.clip((1.0 - np.asarray(similarity, dtype=float)) / 2.0, 0.0, 1.0)
 
@@ -68,7 +59,6 @@ def score(
     max_sentences: int,
     context_window: int,
 ) -> list[float]:
-    """Score an answer by its weakest-supported claim."""
 
     output: list[float] = []
     for block_start in range(0, len(records), 128):
