@@ -1,11 +1,3 @@
-"""Sequential training, ablations, shared generation, baselines and reports.
-
-Stages are recorded in a ledger as they complete, so re-running the same command
-after a crash resumes at the first unfinished stage instead of repeating hours
-of finished work. Each stage is independently resumable too, so the stage that
-was interrupted continues from its own checkpoint rather than from its start.
-"""
-
 from __future__ import annotations
 
 import argparse
