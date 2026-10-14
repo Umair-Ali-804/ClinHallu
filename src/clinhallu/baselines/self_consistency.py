@@ -1,5 +1,3 @@
-"""Self-consistency detector adaptation using five shared answer support votes."""
-
 from .sample_consistency import main_for
 
 
