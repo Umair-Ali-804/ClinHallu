@@ -1,5 +1,3 @@
-"""Shared metrics, manifests, and writers for publication baselines."""
-
 from __future__ import annotations
 
 import json
@@ -18,11 +16,6 @@ from .data import OPTIONAL_METADATA, sha256
 
 
 def select_threshold(y_true, scores, objective: str = "f1") -> tuple[float, float]:
-    """Choose a threshold using validation arrays only.
-
-    MCC is the deterministic tie-breaker, followed by the lower threshold.
-    Evaluation labels never enter this function.
-    """
 
     if objective not in {"f1", "macro_f1"}:
         raise ValueError("threshold objective must be 'f1' or 'macro_f1'")
@@ -250,7 +243,6 @@ def finish_fixed_prediction_run(
     evaluation_labels,
     extras=None,
 ):
-    """Evaluate externally supplied binary judge predictions at threshold 0.5."""
 
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
