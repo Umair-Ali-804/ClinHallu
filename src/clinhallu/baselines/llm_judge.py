@@ -1,5 +1,3 @@
-"""LLM-as-judge baseline using local generation or supplied predictions."""
-
 from __future__ import annotations
 
 import argparse
