@@ -1,5 +1,3 @@
-"""Frozen evaluation for a trained and validation-calibrated model."""
-
 from __future__ import annotations
 
 import argparse
